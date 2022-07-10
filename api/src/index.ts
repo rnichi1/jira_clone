@@ -24,8 +24,8 @@ const initializeExpress = (): void => {
   const app = express();
 
   app.use(cors());
+  app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
-  app.use(express.urlencoded());
 
   app.use(addRespondToResponse);
 
@@ -42,7 +42,12 @@ const initializeExpress = (): void => {
 };
 
 const initializeApp = async (): Promise<void> => {
-  await establishDatabaseConnection();
+  try {
+    await establishDatabaseConnection();
+    console.log('database connection established');
+  } catch (e) {
+    console.log(e);
+  }
   initializeExpress();
 };
 
