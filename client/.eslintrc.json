@@ -11,7 +11,12 @@
     "browser": true,
     "jest": true
   },
-  "extends": ["airbnb", "prettier", "prettier/react"],
+  "extends": ["plugin:import/typescript",
+    "airbnb", "prettier", "prettier/react",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+
+  ],
   "plugins": ["react-hooks"],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
@@ -38,7 +43,8 @@
     // Allows us to lint absolute imports within codebase
     "import/resolver": {
       "node": {
-        "moduleDirectory": ["node_modules", "src/"]
+        "moduleDirectory": ["node_modules", "src/"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
   }

@@ -1,6 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import { Provider } from '@rnichi1/bachelor-thesis-frontend';
 
 import NormalizeStyles from './NormalizeStyles';
+
 import BaseStyles from './BaseStyles';
 import Toast from './Toast';
 import Routes from './Routes';
@@ -11,12 +13,12 @@ import Routes from './Routes';
 import './fontStyles.css';
 
 const App = () => (
-  <Fragment>
+  <Provider>
     <NormalizeStyles />
     <BaseStyles />
     <Toast />
     <Routes />
-  </Fragment>
+  </Provider>
 );
 
 export default App;
