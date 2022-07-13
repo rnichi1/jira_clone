@@ -6,6 +6,7 @@ import { updateArrayItemById } from 'shared/utils/javascript';
 import { createQueryParamModalHelpers } from 'shared/utils/queryParamModal';
 import { PageLoader, PageError, Modal } from 'shared/components';
 
+import { Provider } from '@rnichi1/bachelor-thesis-frontend';
 import NavbarLeft from './NavbarLeft';
 import Sidebar from './Sidebar';
 import Board from './Board';
@@ -38,61 +39,63 @@ const Project = () => {
   };
 
   return (
-    <ProjectPage>
-      <NavbarLeft
-        issueSearchModalOpen={issueSearchModalHelpers.open}
-        issueCreateModalOpen={issueCreateModalHelpers.open}
-      />
-
-      <Sidebar project={project} />
-
-      {issueSearchModalHelpers.isOpen() && (
-        <Modal
-          isOpen
-          testid="modal:issue-search"
-          variant="aside"
-          width={600}
-          onClose={issueSearchModalHelpers.close}
-          renderContent={() => <IssueSearch project={project} />}
+    <Provider>
+      <ProjectPage>
+        <NavbarLeft
+          issueSearchModalOpen={issueSearchModalHelpers.open}
+          issueCreateModalOpen={issueCreateModalHelpers.open}
         />
-      )}
 
-      {issueCreateModalHelpers.isOpen() && (
-        <Modal
-          isOpen
-          testid="modal:issue-create"
-          width={800}
-          withCloseIcon={false}
-          onClose={issueCreateModalHelpers.close}
-          renderContent={modal => (
-            <IssueCreate
+        <Sidebar project={project} />
+
+        {issueSearchModalHelpers.isOpen() && (
+          <Modal
+            isOpen
+            testid="modal:issue-search"
+            variant="aside"
+            width={600}
+            onClose={issueSearchModalHelpers.close}
+            renderContent={() => <IssueSearch project={project} />}
+          />
+        )}
+
+        {issueCreateModalHelpers.isOpen() && (
+          <Modal
+            isOpen
+            testid="modal:issue-create"
+            width={800}
+            withCloseIcon={false}
+            onClose={issueCreateModalHelpers.close}
+            renderContent={modal => (
+              <IssueCreate
+                project={project}
+                fetchProject={fetchProject}
+                onCreate={() => history.push(`${match.url}/board`)}
+                modalClose={modal.close}
+              />
+            )}
+          />
+        )}
+
+        <Route
+          path={`${match.path}/board`}
+          render={() => (
+            <Board
               project={project}
               fetchProject={fetchProject}
-              onCreate={() => history.push(`${match.url}/board`)}
-              modalClose={modal.close}
+              updateLocalProjectIssues={updateLocalProjectIssues}
             />
           )}
         />
-      )}
 
-      <Route
-        path={`${match.path}/board`}
-        render={() => (
-          <Board
-            project={project}
-            fetchProject={fetchProject}
-            updateLocalProjectIssues={updateLocalProjectIssues}
-          />
-        )}
-      />
+        <Route
+          path={`${match.path}/settings`}
+          render={() => <ProjectSettings project={project} fetchProject={fetchProject} />}
+        />
 
-      <Route
-        path={`${match.path}/settings`}
-        render={() => <ProjectSettings project={project} fetchProject={fetchProject} />}
-      />
-
-      {match.isExact && <Redirect to={`${match.url}/board`} />}
-    </ProjectPage>
+        {match.isExact && <Redirect to={`${match.url}/board`} />}
+      </ProjectPage>
+    </Provider>
   );
 };
 
